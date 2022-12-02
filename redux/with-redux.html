@@ -1,0 +1,61 @@
+<html>
+  <body>
+    <style>
+      .container {
+        border: 5px solid black;
+        padding: 10px;
+      }
+    </style>
+    <div id="red"></div>
+    <div id="green"></div>
+    <div id="blue"></div>
+    <script>
+     function reducer(state, action) {
+        if (state === undefined) {
+          return {color: "yellow"}
+        }
+        if(action.type === 'change_color'){
+            return {...state, color: "red"}
+        }
+     }
+     const store = Redux.createStore(reducer);
+      function red() {
+        let store = store.getState();
+        document.getElementById('red').innerHTML =  `
+          <div class="container" id="component_red" background-color:"${state.color}">
+            <h1>Red</h1>
+            <input type="button" value="fire" onclick="
+            "/>
+          </div>
+        `;
+      }
+      red();
+      function green() {
+        document.getElementById('green').innerHTML =  `
+          <div class="container" id="component_green">
+            <h1>Green</h1>
+            <input type="button" value="fire" onclick="
+                document.getElementById('component_red').style.background ='green';
+                document.getElementById('component_green').style.background = 'green';
+                document.getElementById('component_blue').style.background = 'green';
+            "/>
+          </div>
+        `;
+      }
+      green();
+      function blue() {
+        document.getElementById('blue').innerHTML =  `
+          <div class="container" id="component_blue">
+            <h1>Blue</h1>
+            <input type="button" value="fire" onclick="
+                document.getElementById('component_red').style.background ='blue';
+                document.getElementById('component_green').style.background = 'blue';
+                document.getElementById('component_blue').style.background = 'blue';
+            "/>
+          </div>
+        `;
+      }
+      blue();
+    </script>
+  </body>
+</html>
