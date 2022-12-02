@@ -15,7 +15,7 @@
           return {color: "yellow"}
         }
         if(action.type === 'change_color'){
-            return {...state, color: "red"}
+            return {...state, color: action.color};
         }
      }
      const store = Redux.createStore(reducer);
@@ -25,36 +25,38 @@
           <div class="container" id="component_red" background-color:"${state.color}">
             <h1>Red</h1>
             <input type="button" value="fire" onclick="
+               store.dispatch({type: 'change_color', color: 'red'});
             "/>
           </div>
         `;
       }
+      store.subscribe(red); //state값이 바뀔 때 마다 red 함수 호출
       red();
       function green() {
         document.getElementById('green').innerHTML =  `
-          <div class="container" id="component_green">
+          <div class="container" id="component_green" background-color:"${state.color}>
             <h1>Green</h1>
             <input type="button" value="fire" onclick="
-                document.getElementById('component_red').style.background ='green';
-                document.getElementById('component_green').style.background = 'green';
-                document.getElementById('component_blue').style.background = 'green';
+                store.dispatch({type: 'change_color',  color: 'green'});
+            "/>
             "/>
           </div>
         `;
       }
+      store.subscribe(green);
       green();
       function blue() {
+        let store = store.getState();
         document.getElementById('blue').innerHTML =  `
-          <div class="container" id="component_blue">
+          <div class="container" id="component_blue" background-color:"${state.color}">
             <h1>Blue</h1>
             <input type="button" value="fire" onclick="
-                document.getElementById('component_red').style.background ='blue';
-                document.getElementById('component_green').style.background = 'blue';
-                document.getElementById('component_blue').style.background = 'blue';
+                store.dispatch({type: 'change_color',  color: 'blue'});
             "/>
           </div>
         `;
       }
+      store.subscribe(blue);
       blue();
     </script>
   </body>
