@@ -1,4 +1,8 @@
+<!DOCTYPE html>
 <html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.1/redux.js"></script>
+    </head>
   <body>
     <style>
       .container {
@@ -15,17 +19,18 @@
           return {color: "yellow"}
         }
         if(action.type === 'change_color'){
-            return {...state, color: action.color};
+            newState = Object.assign({}, state, {color:action.color});
         }
+        return newState;
      }
-     const store = Redux.createStore(reducer);
+     let store = Redux.createStore(reducer);
       function red() {
-        let store = store.getState();
+        let state = store.getState();
         document.getElementById('red').innerHTML =  `
           <div class="container" id="component_red" background-color:"${state.color}">
             <h1>Red</h1>
             <input type="button" value="fire" onclick="
-               store.dispatch({type: 'change_color', color: 'red'});
+            store.dispatch({type: 'change_color', color: 'red'});
             "/>
           </div>
         `;
@@ -33,12 +38,12 @@
       store.subscribe(red); //state값이 바뀔 때 마다 red 함수 호출
       red();
       function green() {
+        let state = store.getState();
         document.getElementById('green').innerHTML =  `
           <div class="container" id="component_green" background-color:"${state.color}>
             <h1>Green</h1>
             <input type="button" value="fire" onclick="
-                store.dispatch({type: 'change_color',  color: 'green'});
-            "/>
+            store.dispatch({type: 'change_color',  color: 'green'});
             "/>
           </div>
         `;
@@ -46,12 +51,12 @@
       store.subscribe(green);
       green();
       function blue() {
-        let store = store.getState();
+        let state = store.getState();
         document.getElementById('blue').innerHTML =  `
           <div class="container" id="component_blue" background-color:"${state.color}">
             <h1>Blue</h1>
             <input type="button" value="fire" onclick="
-                store.dispatch({type: 'change_color',  color: 'blue'});
+            store.dispatch({type: 'change_color',  color: 'blue'});
             "/>
           </div>
         `;

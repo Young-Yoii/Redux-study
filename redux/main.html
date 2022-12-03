@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.1/redux.js"></script>
+</head>
 <html>
     <body>
         <div id="subject"></div>
@@ -15,11 +18,19 @@ function subject(){
     `
 }
 function TOC(){
+    const state = store.getState();
+    let liTags = '';
+    state.contents.map((item) => liTags +=  
+        `<li>
+            <a href="${item.id}">${item.title}</a>
+        </li>
+        `
+        )
+    console.log(liTags)
     document.querySelector('#toc').innerHTML = `
     <nav>
         <ol>
-            <li><a href="1.html">HTML</a></li>
-            <li><a href="2.html">CSS</a></li>
+           ${liTags}
         </ol>
     </nav>
     `;
@@ -40,6 +51,18 @@ function article(){
     </article>
     `
 }
+function reducer(state, action){
+    if(state === undefined){
+        return {
+            contents:[
+                {id:1, title:'HTML', desc:'HTML is ..'},
+                {id:2, title:'CSS', desc:'CSS is ..'},
+                {id:2, title:'CSS', desc:'CSS is ..'}
+            ]
+        }
+    }
+}
+const store = Redux.createStore(reducer);
 subject();
 TOC();
 control();
