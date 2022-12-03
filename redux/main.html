@@ -22,7 +22,14 @@ function TOC(){
     let liTags = '';
     state.contents.map((item) => liTags +=  
         `<li>
-            <a href="${item.id}">${item.title}</a>
+            <a onclick="
+                event.preventDefault();
+                let action = {type: 'select', id:${item.id}}
+                store.dispatch(action);
+            "
+                href="${item.id}">
+                ${item.title}
+            </a>
         </li>
         `
         )
@@ -51,16 +58,22 @@ function article(){
     </article>
     `
 }
+
 function reducer(state, action){
     if(state === undefined){
         return {
+            selected_id: null,
             contents:[
                 {id:1, title:'HTML', desc:'HTML is ..'},
                 {id:2, title:'CSS', desc:'CSS is ..'},
-                {id:2, title:'CSS', desc:'CSS is ..'}
             ]
         }
     }
+    if(action.type === 'select'){
+        // newState = Object.assign({}, state, {selected_id:action.id});
+        return {...state, selected_id:action.id}
+    }
+    console.log(state)
 }
 const store = Redux.createStore(reducer);
 subject();
