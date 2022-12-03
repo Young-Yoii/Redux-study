@@ -44,31 +44,80 @@ function TOC(){
 function control(){
     document.querySelector('#control').innerHTML = `
     <ul>
-        <li><a href="/create">create</a></li>
-        <li><input type="button" value="delete"></li>
+        <li><a onclick="
+                event.preventDefault();
+                store.dispatch({
+                    type: 'change_mode',
+                    mode: 'create'
+                })
+
+            " href="/create">create</a></li>
+        <li><input onclick="
+            store.dispatch({
+                type: 'delete',
+            })" 
+            type="button" value="delete"></li>
     </ul>
     `;
 }
 function article(){
     const state = store.getState();
-    let aTitle, aDecs;
-    state.contents.map((item) => {
-        if(item.id === state.selected_id){
-            aTitle = item.title
-            aDecs = item.desc
-        }
-    })
-    document.querySelector('#content').innerHTML = `
-    <article>
-        <h2>${aTitle}</h2>
-        ${aDecs}
-    </article>
-    `
+    if(state.mode === 'create'){
+        document.querySelector('#content').innerHTML = `
+        <article>
+            <form onsubmit="
+                event.preventDefault();
+                let title = this.title.value;
+                let desc = this.desc.value;
+                store.dispatch ({
+                    type: 'create',
+                    title: title,
+                    desc: desc,
+                })
+            ">
+                <p>
+                    <input type="text" name="title"   />
+                </p>
+                <p>
+                    <textarea name="desc" ></textarea>
+                </p>
+                <p>
+                    <input type="submit" />
+                </p>
+            </form>
+        </article>
+        ` 
+    }else if(state.mode === 'read'){
+        let aTitle
+        let aDesc;
+        state.contents.map((item) => {
+            if(item.id === state.selected_id){
+                aTitle = item.title;
+                aDesc = item.desc;
+            }
+        })
+        document.querySelector('#content').innerHTML = `
+        <article>
+            <h2>${aTitle}</h2>
+            <p>${aDesc}</p>
+        </article>
+        ` 
+    }else if(state.mode === 'welcome'){
+        document.querySelector('#content').innerHTML = `
+        <article>
+            <h2>welcome</h2>
+        </article>
+        ` 
+    }
+   
 }
 
 function reducer(state, action){
+    console.log(state, action)
     if(state === undefined){
         return {
+            max_id:2,
+            mode:'welcome',
             selected_id: 1,
             contents:[
                 {id:1, title:'HTML', desc:'HTML is ..'},
@@ -77,13 +126,27 @@ function reducer(state, action){
         }
     }
     if(action.type === 'select'){
-        // newState = Object.assign({}, state, {selected_id:action.id});
-        return {...state, selected_id:action.id}
+        return {...state, selected_id:action.id, mode:'read'}
+    }else if(action.type === 'create'){
+        let newMaxId = state.max_id + 1;
+        let newContents = state.contents.concat();
+        newContents.push({id:newMaxId, title: action.title, desc: action.desc})
+        return {...state, max_id:newMaxId, contents:newContents, mode:'read'}
+    }else if(action.type === 'delete'){
+        let newContents = [];
+        state.contents.map((item) => {
+            if(item.id !== state.selected_id){
+                newContents.push(item)
+            }
+        })
+        return {...state, contents:newContents, mode:'welcome'}
+    }else if(action.type === 'change_mode'){
+        return {...state, mode:action.mode}
     }
-     console.log({...state, selected_id:action.id})
 }
 const store = Redux.createStore(reducer);
-store.subscribe(article)
+store.subscribe(article);
+store.subscribe(TOC);
 subject();
 TOC();
 control();
