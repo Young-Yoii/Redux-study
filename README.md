@@ -1,2 +1,10 @@
-# Redux-study
-리덕스 공부
+# 📖Redux-study
+
+✏Redux <br />
+```npm i redux```
+
+✏react-redux <br />
+```npm i react-redux```
+
+✏redux-toolkit <br />
+```npx create-react-app app-redux --template redux```
