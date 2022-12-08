@@ -1,4 +1,4 @@
-# 📖Redux-study
+# 📖Redux-study / 설치방법
 
 ✏Redux <br />
 ```npm i redux```
